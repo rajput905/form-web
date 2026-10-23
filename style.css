@@ -1,0 +1,382 @@
+/* ============ TOKENS ============ */
+:root {
+  --page: #efe9dd;
+  --surface: #fbf8f2;
+  --ink: #22201c;
+  --muted: #6b655a;
+  --border: #d9cfbb;
+  --accent: #b4532a;
+  --accent-dark: #93401f;
+  --success: #2f7d5b;
+  --danger: #b03a2e;
+  --radius: 10px;
+  --serif: "Fraunces", Georgia, "Times New Roman", serif;
+  --sans: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+/* ============ BASE ============ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--sans);
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--ink);
+  background: var(--page);
+  min-height: 100vh;
+}
+
+/* Soft decorative shapes behind the card */
+body::before,
+body::after {
+  content: "";
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(60px);
+  opacity: 0.45;
+  z-index: 0;
+  pointer-events: none;
+}
+
+body::before {
+  width: 420px;
+  height: 420px;
+  top: -120px;
+  left: -100px;
+  background: #e7b89a;
+}
+
+body::after {
+  width: 380px;
+  height: 380px;
+  bottom: -120px;
+  right: -80px;
+  background: #b9cfc2;
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* ============ LAYOUT ============ */
+.page {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 3rem 1rem;
+}
+
+.card {
+  width: 100%;
+  max-width: 580px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 2.75rem;
+  box-shadow: 0 20px 50px rgba(34, 32, 28, 0.12);
+  animation: cardIn 0.7s ease both;
+}
+
+/* ============ HEADER ============ */
+.card-header {
+  margin-bottom: 2rem;
+}
+
+.eyebrow {
+  font-size: 0.8rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 0.5rem;
+}
+
+.card-header h1 {
+  font-family: var(--serif);
+  font-weight: 600;
+  font-size: clamp(1.8rem, 4vw, 2.3rem);
+  line-height: 1.15;
+  margin-bottom: 0.6rem;
+}
+
+.intro {
+  color: var(--muted);
+}
+
+/* ============ FORM FIELDS ============ */
+.form {
+  display: grid;
+  gap: 1.35rem;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+}
+
+.field label {
+  font-size: 0.95rem;
+  font-weight: 500;
+  margin-bottom: 0.4rem;
+}
+
+.req {
+  color: var(--accent);
+}
+
+.optional {
+  font-weight: 400;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.field input,
+.field textarea {
+  width: 100%;
+  font: inherit;
+  color: var(--ink);
+  background: #fff;
+  border: 1.5px solid var(--border);
+  border-radius: 8px;
+  padding: 0.8rem 0.95rem;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+}
+
+.field input::placeholder,
+.field textarea::placeholder {
+  color: #aaa294;
+}
+
+.field textarea {
+  resize: vertical;
+  min-height: 130px;
+}
+
+.field input:hover,
+.field textarea:hover {
+  border-color: #bfb49c;
+}
+
+.field input:focus,
+.field textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px rgba(180, 83, 42, 0.14);
+}
+
+/* Error state */
+.field.invalid input,
+.field.invalid textarea {
+  border-color: var(--danger);
+  background: #fdf4f2;
+}
+
+.field.invalid input:focus,
+.field.invalid textarea:focus {
+  box-shadow: 0 0 0 4px rgba(176, 58, 46, 0.14);
+}
+
+/* Valid state */
+.field.valid input,
+.field.valid textarea {
+  border-color: var(--success);
+}
+
+.error {
+  min-height: 1.3em;
+  margin-top: 0.35rem;
+  font-size: 0.85rem;
+  color: var(--danger);
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.field.invalid .error::before {
+  content: "!";
+  display: inline-grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--danger);
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+
+.field-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+}
+
+.field-footer .error {
+  flex: 1;
+}
+
+.count {
+  font-size: 0.82rem;
+  color: var(--muted);
+  margin-top: 0.35rem;
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.count.near-limit {
+  color: var(--accent);
+}
+
+.count.over-limit {
+  color: var(--danger);
+  font-weight: 600;
+}
+
+/* ============ SUBMIT BUTTON ============ */
+.submit-btn {
+  position: relative;
+  margin-top: 0.5rem;
+  padding: 0.95rem 1.5rem;
+  font: inherit;
+  font-weight: 600;
+  font-size: 1rem;
+  color: #fff;
+  background: var(--accent);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  overflow: hidden;
+  transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.submit-btn:hover {
+  background: var(--accent-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 10px 22px rgba(180, 83, 42, 0.3);
+}
+
+.submit-btn:active {
+  transform: translateY(0);
+}
+
+.submit-btn:disabled {
+  cursor: wait;
+  opacity: 0.85;
+  transform: none;
+  box-shadow: none;
+}
+
+.btn-label {
+  transition: opacity 0.2s ease;
+}
+
+.btn-loader {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  margin: -10px 0 0 -10px;
+  border: 2.5px solid rgba(255, 255, 255, 0.4);
+  border-top-color: #fff;
+  border-radius: 50%;
+  opacity: 0;
+}
+
+.submit-btn.loading .btn-label {
+  opacity: 0;
+}
+
+.submit-btn.loading .btn-loader {
+  opacity: 1;
+  animation: spin 0.8s linear infinite;
+}
+
+/* Success flash on the button */
+.submit-btn.success {
+  background: var(--success);
+}
+
+/* ============ STATUS MESSAGE ============ */
+.status {
+  min-height: 1.5em;
+  font-size: 0.95rem;
+  text-align: center;
+  margin-top: 0.25rem;
+}
+
+.status.success {
+  color: var(--success);
+  animation: fadeUp 0.5s ease both;
+}
+
+.status.error {
+  color: var(--danger);
+  animation: shake 0.4s ease;
+}
+
+/* Shake when a field is invalid */
+.field.shake {
+  animation: shake 0.4s ease;
+}
+
+/* ============ KEYFRAMES ============ */
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: none; }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20%      { transform: translateX(-6px); }
+  40%      { transform: translateX(6px); }
+  60%      { transform: translateX(-4px); }
+  80%      { transform: translateX(4px); }
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 560px) {
+  .card {
+    padding: 1.75rem 1.4rem;
+    border-radius: 12px;
+  }
+
+  .field-footer {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .count {
+    align-self: flex-end;
+    margin-top: -1.2rem;
+  }
+}
+
+/* ============ REDUCED MOTION ============ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
